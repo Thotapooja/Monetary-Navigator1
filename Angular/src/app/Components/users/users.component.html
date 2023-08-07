@@ -1,0 +1,139 @@
+<mat-toolbar class="navControls">
+    <span (click)="GotoHome()" class="branding_white">Monetary Navigator</span>
+    <div class="spacer"></div>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="downloadPdf()">User Guide</button>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="openContact()">Contact</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="displayUsers()">Users</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()">Company</button>
+    <a mat-button  activeroute="nav__link--active" class="nav__link" routerlink="/login" href="/login">Logout</a>
+</mat-toolbar>  
+<div class="admin-layout--flex admin-layout--fullWidth outer-div">
+    <div class="content-div admin-layout--hasFlexContainer">
+        <div class="table-div adminTableList">
+            <div class="adminPanel admin-main-div">
+                <table class="adminPanel admin-main-div">
+                    <thead>
+                        <tr class="row-div head-div">
+                            <th class="cell-div"> First Name </th>
+                            <th class="cell-div"> Last Name </th>
+                            <th class="cell-div"> Email </th>
+                        </tr>
+                    </thead>
+                    <tbody class="body-div">
+                        <tr *ngFor="let user of users" class="row-div in-div-body">
+                            <th class="cell-div">
+                               {{user.firstName}}
+                           </th>
+                           <th class="cell-div">
+                               {{user.lastName}}
+                           </th>
+                           <th class="cell-div">
+                               {{user.email}}
+                           </th>
+                           <!--<th class="cell-div">
+                               
+                           </th>-->
+                           <th class="cell-div1">
+                               <button mat-button activeroute="nav__link--active" class="nav__link" (click)="viewUser(user)">View</button>                    
+                               <button mat-button activeroute="nav__link--active" class="nav__link" (click)="editUser(user)">Edit</button>
+                               <button mat-button activeroute="nav__link--active" class="nav__link" (click)="deleteUser(user)">Delete</button>
+                           </th>
+                       </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="detail-div">
+            <div _ngcontent-c9 class="adminPanel detail-main-div">
+                <div _ngcontent-c9 class="head-div1">
+                    <p _ngcontent-c9 class="detail-row-heading">
+                        Details
+                    </p>
+                </div>
+            </div>
+            <div _ngcontent-c9>
+                <table _ngcontent-c9>                 
+                    <tr class="row-div1 in-div-body"  _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">First Name</td>
+                        <span *ngIf="editUserDetails? '':user.firstName">{{!editUserDetails?user.firstName:''}}</span>
+                        <span *ngIf="editUserDetails?user.firstName:''" >{{editUserDetails?user.firstName:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body"  _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Last Name</td>
+                        <span *ngIf="editUserDetails? '':user.lastName">{{!editUserDetails?user.lastName:''}}</span>
+                        <span *ngIf="editUserDetails?user.lastName:''" >{{editUserDetails?user.lastName:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Email</td>
+                        <span *ngIf="editUserDetails? '':user.email">{{!editUserDetails?user.email:''}}</span>
+                        <span *ngIf="editUserDetails?user.email:''">{{editUserDetails?user.email:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">User Status</td>
+                        <div>
+                            <select [disabled]="editUserDetails" class="form__input form__input--large ng-dirty ng-valid ng-touched" (change)="change($event,user)" style="height: 100%;width:100%">
+                              <option [disabled]="true">
+                                {{userStatus?userStatus:'Select'}}
+                              </option>
+                              <option [value]="userStatus?1:''" >
+                                Access Provided
+                              </option>
+                              <option [value]="userStatus?0:''" >
+                                Awaiting for Access
+                              </option>
+                              <option [value]="userStatus?2:''" >
+                                Access Denied
+                              </option>
+                            </select>
+                        </div>                   
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Date of Birth</td>
+                        <span *ngIf="editUserDetails? '':user.dateofBirth">{{!editUserDetails?user.dateofBirth:''}}</span>
+                        <span *ngIf="editUserDetails?user.dateofBirth:''" >{{editUserDetails?user.dateofBirth:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Organisation Name</td>
+                        <span *ngIf="editUserDetails? '':organisation.name">{{!editUserDetails?organisation.name:''}}</span>
+                        <span *ngIf="editUserDetails?organisation.name:''" >{{editUserDetails?organisation.name:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Website</td>
+                        <span *ngIf="editUserDetails? '':organisation.website">{{!editUserDetails?organisation.website:''}}</span>
+                        <span *ngIf="editUserDetails?organisation.website:''" >{{editUserDetails?organisation.website:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Sector</td>
+                        <span *ngIf="editUserDetails? '':organisation.sector">{{!editUserDetails?organisation.sector:''}}</span>
+                        <span *ngIf="editUserDetails?organisation.sector:''" >{{editUserDetails?organisation.sector:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Sub Sector</td>
+                        <span *ngIf="editUserDetails? '':organisation.subSector">{{!editUserDetails?organisation.subSector:''}}</span>
+                        <span *ngIf="editUserDetails?organisation.subSector:''" >{{editUserDetails?organisation.subSector:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Description</td>
+                        <span *ngIf="editUserDetails? '':organisation.description">{{!editUserDetails?organisation.description:''}}</span>
+                        <span *ngIf="editUserDetails?organisation.description:''" >{{editUserDetails?organisation.description:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Country</td>
+                        <span *ngIf="editUserDetails? '':organisation.country">{{!editUserDetails?organisation.country:''}}</span>
+                        <span *ngIf="editUserDetails?organisation.country:''" >{{editUserDetails?organisation.country:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Currency</td>
+                        <span *ngIf="editUserDetails? '':organisation.currency">{{!editUserDetails?organisation.currency:''}}</span>
+                        <span *ngIf="editUserDetails?organisation.currency:''" >{{editUserDetails?organisation.currency:''}}</span>
+                    </tr>
+                    <tr class="row-div1 in-div-body" _ngcontent-c9>
+                        <td _ngcontent-c9 class="cell-div2">Founded Year</td>
+                        <span *ngIf="editUserDetails? '':organisation.foundedYear">{{!editUserDetails?organisation.foundedYear:''}}</span>
+                        <span *ngIf="editUserDetails?organisation.foundedYear:''" >{{editUserDetails?organisation.foundedYear:''}}</span>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+    <div class="loginRegister">
+        <form #registerForm="ngForm" (ngSubmit)="login(registerForm)" class="form loginRegister__panel loginRegister__panel--form loginRegister__panel--leftAligned ng-invalid ng-dirty ng-touched" novalidate>
+            <h4>Registration</h4>
+            <p>
+                Cool!! You decided to register for Monetary Navigator! Fill out the fields below to activate your email.
+            </p>
+            <div class="form__group form__group--large">
+                <input class="form__input form__input--large ng-untouched ng-pristine ng-invalid" id="firstname" formcontrolname="firstname" name="firstname" placeholder="First name" (ngModel)="user.email" type="email">
+            </div>
+            <div class="form__group form__group--large">
+                <input class="form__input form__input--large ng-untouched ng-pristine ng-invalid" id="lastname" formcontrolname="lastname" name="lastname" placeholder="Last name" (ngModel)="user.password" type="email">
+            </div>
+            <fieldset class="form__group form__group--fieldset form__group--large">
+                <legend class="form__legend">Date of birth</legend>
+                <input class="form__input form__input--large ng-untouched ng-pristine ng-invalid" id="dob"  formcontrolname="dob" type="date" name="dob" (ngModel)="user.dateofBirth" [max]="maxBirthDate"required>
+            </fieldset>
+            <div formgroupname="passwordGroup" class="ng-invalid ng-dirty ng-touched">
+                <div class="form__group form__group--large">
+                    <input class="form__input form__input--large ng-dirty ng-valid ng-touched" id="password" formcontrolname="password" name="password" (ngModel)="user.password" placeholder="Password" type="password">
+                </div>
+                <div class="form__group form__group--large">
+                    <input class="form__input form__input--large ng-dirty ng-valid ng-touched" id="confirmPassword" formcontrolname="confirmPassword" name="confirmPassword" (ngModel)="user.confirmPassword"  placeholder="Confirm password" type="password">
+                </div>
+            </div>
+            <div class="form__group form__group--large">
+                <input class="form__input form__input--large ng-untouched ng-pristine ng-invalid" id="email" formcontrolname="email" name="email" (ngModel)="user.email" placeholder="E-mail" type="email">
+            </div>
+            <div class="form__group form__group--large form__groupAgree">
+                <p class="form__checkbox">
+                    <label class="form__checkbox-label">
+                        <input class="form__checkbox-input ng-untouched ng-pristine ng-invalid" id="acceptedToA" name="acceptedToA" formcontrolname="acceptedToA" type="checkbox">
+                        <span class="form__checkbox-txt">
+                            I agree to the <a href="https://www.ey.com/en_nl/finance-navigator/terms-conditions">Terms & Conditions</a>
+                        </span>
+                    </label>
+                </p>
+            </div>
+            <button class="loginRegister__btn btn btn--secondary">Activate my e-mail</button>
+        </form>
+    </div>

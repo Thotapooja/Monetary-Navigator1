@@ -1,0 +1,1280 @@
+<mat-toolbar class="navControls">
+    <a class="navControls__branding branding branding--compact active" [routerLink]="['/home',userId,orgId]">
+        <span class="branding_white">Monetary Navigator</span>
+    </a>
+    <div class="spacer"></div>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()"></button>
+    <ul>
+        <li>
+            <a href="#">Financial Statements</a>
+            <ul class="name">
+                <li>
+                    <a [routerLink]="['/income',userId,orgId,scenarioId]">Income statement</a>
+                </li>
+                <li>
+                    <a href="#">Balance sheet</a>
+                </li>
+                <li>
+                    <a href="#">Cash flow statement </a>
+                </li>
+                <li>
+                    <a href="#">Cash flow</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <a href="#">Data Input</a>
+            <ul class="name">
+                <li>
+                    <a [routerLink]="['/revenue',userId,orgId,scenarioId]">Revenue (Sales)</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/cogs',userId,orgId,scenarioId]">Cost of goods sold</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/personnel',userId,orgId,scenarioId]">Personnel</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/assets',userId,orgId,scenarioId]">Operating expenses</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/assets',userId,orgId,scenarioId]">Assets</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/financing',userId,orgId,scenarioId]">Financing</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="downloadPdf()">User Guide</button>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="openContact()">Contact</button>
+    <button mat-button *ngIf="disableUsers" activeroute="nav__link--active" class="nav__link" (click)="displayUsers()">Users</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()">Company</button>
+    <a mat-button  activeroute="nav__link--active" class="nav__link" routerlink="/login" href="/login">Logout</a>
+</mat-toolbar>
+<div class="tabHeader" (click)="ngOnInit()">
+    <a class="tabHeader__anchor tabHeader--active" [routerLink]="['/revenue',userId,orgId,scenarioId]">
+        <div class="tabHeader__title">Revenue (Sales)</div>
+    </a>
+    <a class="tabHeader__anchor" [routerLink]="['/cogs',userId,orgId,scenarioId]">
+        <div class="tabHeader__title">Cost of goods sold</div>
+    </a>
+</div>
+<router-outlet></router-outlet>
+<section class="section--table1">
+<div class="tabBody">
+    <div class="tabBody__content tabBody--active">
+        <h2 (click)="ngOnInit()">Add revenue</h2>
+    </div>
+    <div class="form form--inline">
+        <div class="form__group form__group--md">
+            <label class="form__label form__label--top">
+                Type of offering
+            </label>
+            <select (change)="changeCategory($event)" class="k-widget k-dropdown k-header">
+                <option class="k-widget k-dropdown k-header" [disabled]="true">Select</option>
+                <option [value] ="1" class="k-widget k-dropdown k-header">Product/Service</option>
+                <option [value]="2" class="k-widget k-dropdown k-header">Subscription</option>
+                <option [value]="3" class="k-widget k-dropdown k-header">Other</option>
+            </select>
+        </div>
+    </div>
+    <div *ngIf="this.revenueCategory==1" class="displayInline">
+        <div class="displayInline">
+            <form #productForm="ngForm" (ngSubmit)="createProduct(productForm)" class="form form__display--inline form--inline ng-untouched ng-pristine ng-invalid">
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Name </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" id="revenueName" name="revenueName" (ngModel)="revenue.revenueName" formcontrolname="revenueName" maxlength="50" placeholder="Name" type="email">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Start year </label>
+                    <select id="startYear" name="startYear" formcontrolname="startYear" (ngModel)="revenue.startYear" (change)="change($event)" class="k-widget k-dropdown k-header ng-untouched ng-pristine ng-invalid">
+                        <option [value]="revenueStartYear?revenueStartYear:i.year" *ngFor="let i of years">{{i.year}}</option>
+                    </select>
+                </div>
+                <div class="form__group form__group--mdFreqInc">
+                    <label class="form__label form__label--top"> Start month </label>
+                    <select id="startMonth" name="startMonth" formcontrolname="startMonth" (ngModel)="revenue.startMonth" (change)="change($event)" class="k-widget k-dropdown k-header ng-untouched ng-pristine ng-invalid">
+                        <option [value]="revenueStartYear?revenueStartYear:i.month" *ngFor="let i of monthsList">{{i.month}}</option>
+                    </select>
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> No. of new clients in start month </label>
+                    <input  id="clientsInStartMonth" name="clientsInStartMonth" (ngModel)="revenue.clientsInStartMonth"  formcontrolname="clientsInStartMonth"class="form__input ng-untouched ng-pristine ng-invalid" maxlength="50" placeholder="No. of new clients in start month" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> No. of units sold per client/month</label>
+                    <input id="unitsSoldperclientpermonth" name="unitsSoldperclientpermonth" (ngModel)="revenue.unitsSoldperclientpermonth" formcontrolname="unitsSoldperclientpermonth" class="form__input ng-untouched ng-pristine ng-invalid" maxlength="50" placeholder="No. of units sold per client/month" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Frequency of client increase </label>
+                    <select class="k-widget k-dropdown k-header" id="frequencyIncr" name="frequencyIncr" formcontrolname="frequencyIncr" (ngModel)="revenue.frequencyClientIncr">
+                        <option class="k-widget k-dropdown k-header" [disabled]="true">Freq. of revenue increase</option>
+                        <option [value] ="1" class="k-widget k-dropdown k-header">Monthly</option>
+                        <option [value]="2" class="k-widget k-dropdown k-header">Yearly</option>
+                    </select>  
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> %incr. of clients </label>
+                    <input id="perClientIncr" name="perClientIncr"  (ngModel)="revenue.perClientIncr"  formcontrolname="perClientIncr" class="form__input ng-untouched ng-pristine ng-invalid" maxlength="50" placeholder="%incr. of clients" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Price per unit </label>
+                    <input id="pricePerUnit" name="pricePerUnit" (ngModel)="revenue.pricePerUnit" formcontrolname="pricePerUnit" class="form__input ng-untouched ng-pristine ng-invalid" maxlength="50" placeholder="Price per unit" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> No. of days to get paid </label>
+                    <input id="daysPaid" name="daysPaid" (ngModel)="revenue.daysPaid" formcontrolname="daysPaid" class="form__input ng-untouched ng-pristine ng-invalid" maxlength="50" placeholder="No. of days to get paid" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Assumption </label>
+                    <input id="assumptions" name="assumptions" (ngModel)="revenue.assumptions" formcontrolname="assumptions" class="form__input ng-untouched ng-pristine ng-invalid" maxlength="50" placeholder="Assumptions" type="text">
+                </div>
+                <div class="alignRight">
+                    <button class="btn">
+                        <span class="btn__plus">
+                            Add
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+       
+    </div>
+    <div *ngIf="this.revenueCategory==2"  class="displayInline">
+        <div class="displayInline">
+            <form  class="form form__display--inline form--inline ng-untouched ng-pristine ng-invalid">
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Name </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" formcontrolname="name" maxlength="50" placeholder="Name" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Start year </label>
+                    <select class="k-widget k-dropdown k-header ng-untouched ng-pristine ng-invalid">
+                        <option value="1" class="k-input">Product/Service</option>
+                        <option value="2">Subscription</option>
+                        <option value="3">Other</option>
+                    </select>
+                </div>
+                <div class="form__group form__group--mdFreqInc">
+                    <label class="form__label form__label--top"> Start month </label>
+                    <select class="k-widget k-dropdown k-header ng-untouched ng-pristine ng-invalid">
+                        <option value="1" class="k-input">Product/Service</option>
+                        <option value="2">Subscription</option>
+                        <option value="3">Other</option>
+                    </select>
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> No. of new clients in start month </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" formcontrolname="name" maxlength="50" placeholder="Name" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Frequency of new client increase </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" formcontrolname="name" maxlength="50" placeholder="Name" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> %incr. of clients </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" formcontrolname="name" maxlength="50" placeholder="Name" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Monthly churn rate(%) </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" formcontrolname="name" maxlength="50" placeholder="Name" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Monthly subscription price </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" formcontrolname="name" maxlength="50" placeholder="Name" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> No. of days to get paid </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" formcontrolname="name" maxlength="50" placeholder="Name" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Assumption </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" formcontrolname="name" maxlength="50" placeholder="Name" type="text">
+                </div>
+            </form>
+        </div>
+        <div class="alignRight">
+            <button class="btn">
+                <span class="btn__plus">
+                    Add
+                </span>
+            </button>
+        </div>
+    </div>
+    <div *ngIf="this.revenueCategory==3"  class="displayInline">
+        <div class="displayInline">
+            <form #otherForm="ngForm" (ngSubmit)="createOtherRevenue(otherForm)" class="form form__display--inline form--inline ng-untouched ng-pristine ng-invalid">
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Name </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" (ngModel)="otherRevenue.revenueName" id="revenueName" name="revenueName" formcontrolname="name" maxlength="50" placeholder="Name" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Start year </label>
+                    <select id="startYear" name="startYear" formcontrolname="startYear" (ngModel)="otherRevenue.startYear" (change)="change($event)" class="k-widget k-dropdown k-header ng-untouched ng-pristine ng-invalid">
+                        <option [value]="revenueStartYear?revenueStartYear:i.year" *ngFor="let i of years">{{i.year}}</option>
+                    </select>
+                </div>
+                <div class="form__group form__group--mdFreqInc">
+                    <label class="form__label form__label--top"> Start month </label>
+                    <select id="startMonth" name="startMonth" formcontrolname="startMonth" (ngModel)="otherRevenue.startMonth" (change)="change($event)" class="k-widget k-dropdown k-header ng-untouched ng-pristine ng-invalid">
+                        <option [value]="revenueStartYear?revenueStartYear:i.month" *ngFor="let i of monthsList">{{i.month}}</option>
+                    </select>
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Revenue in start month </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" id="revenueinStartMonth" name="revenueinStartMonth" (ngModel)="otherRevenue.revenueinStartMonth" formcontrolname="name" maxlength="50" placeholder="Revenue in start month" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top"> Frequency of revenue increase </label>
+                    <select class="k-widget k-dropdown k-header" id="frequencyIncr" name="frequencyIncr" formcontrolname="frequencyIncr" (ngModel)="otherRevenue.frequencyClientIncr">
+                        <option class="k-widget k-dropdown k-header" [disabled]="true">Freq. of revenue increase</option>
+                        <option [value] ="1" class="k-widget k-dropdown k-header">Monthly</option>
+                        <option [value]="2" class="k-widget k-dropdown k-header">Yearly</option>
+                    </select>               
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top" > %incr. of revenue </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" id="perIncrRevenue" (ngModel)="otherRevenue.perClientIncr" name="perIncrRevenue" formcontrolname="perIncrRevenue" maxlength="50" placeholder="%incr. of revenue" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top" > No. of days to get paid </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" (ngModel)="otherRevenue.daysPaid" id="daysGetPaid" name="daysGetPaid"  formcontrolname="daysGetPaid" maxlength="50" placeholder="Days to get paid" type="text">
+                </div>
+                <div class="form__group form__group--md">
+                    <label class="form__label form__label--top" > Assumptions </label>
+                    <input class="form__input ng-untouched ng-pristine ng-invalid" (ngModel)="otherRevenue.assumptions" id="assumptions" name="assumptions" formcontrolname="assumptions" maxlength="50" placeholder="Assumptions" type="text">
+                </div>
+                <div class="alignRight">
+                    <button class="btn">
+                        <span class="btn__plus">
+                            Add
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+</div>
+</section>
+<!--<section class="section--table">
+    <span class="currency">Revenue Streams </span>
+    <div class="table-container scroller-div" style="overflow:auto; height:500px">
+        <table class="tabular">
+            <colgroup span="12">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="tabular__th tabular__th--fixedwidth header-sticky-first" rowspan="1"></th>
+                </tr>
+                <tr>
+                    <th class="tabular__th textRight header-sticky-second" rowspan="1"></th>
+                    <th class="tabular__th textRight header-sticky-second" rowspan="1"></th>
+                    <th class="tabular__th textRight header-sticky-first colhidden"  rowspan="1" scope="colgroup"></th>
+                    <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                        <input type="checkbox" (click)="onChange($event,'One')" class="dynamic-table-container__toggleButton__smallbox" style="float: right;">
+                    </th>
+                    <th class="tabular__th textRight header-sticky-first colhidden" colspan="12" rowspan="1" scope="colgroup"></th>
+                    <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                        <input type="checkbox" (click)="onChange($event,'Two')" class="dynamic-table-container__toggleButton__smallbox" style="float: right;">
+                    </th>
+                    <th class="tabular__th textRight header-sticky-first colhidden" colspan="12" rowspan="1" scope="colgroup"></th>
+                    <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                        <button (click)="onChange($event,'Three')" class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                    </th>
+                    <th class="tabular__th textRight header-sticky-first colhidden" colspan="12" rowspan="1" scope="colgroup"></th>
+                    <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                        <button (click)="onChange($event,'Four')"  class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                    </th>
+                    <th class="tabular__th textRight header-sticky-first colhidden" colspan="12" rowspan="1" scope="colgroup"></th>
+                    <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                        <button (click)="onChange($event,'Five')"  class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                    </th>
+                </tr>
+                <tr *ngFor="let year of years">
+                    <th class="cell-div">
+                        {{year.year}}
+                    </th>
+                    
+                </tr>
+            </thead>
+            <tbody _ngcontent-c2>
+                <tr _ngcontent-c2 class="dynamic-tabular__tr personaltotal_tr">
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textLeft" colspan="2">
+                        Revenue Total
+                    </td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight colhidden">1</td>
+                    <td _ngcontent-c2 class="dynamic-tabular__td personaltotal_td textRight">1</td>
+                </tr>
+                <tr _ngcontent-c2>
+                    <td _ngcontent-c2 class="paddingTop10" colspan="4"></td>
+                </tr>
+                <tr _ngcontent-c2 class="dynamic-tabular__tr category_td">
+                    <td _ngcontent-c2class="dynamic-tabular__td category_td textLeft revenuerow" colspan="2" ></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>-->
+<section _ngcontent-c2 class="section--table">
+    <h3 _ngcontent-c2>Revenue Streams</h3>
+    <div _ngcontent-c2 class="dynamic-table-container scroller-div" style="overflow:auto; height:500px">
+        <table _ngcontent-c2 class="dynamic-tabular">
+            <colgroup span="12"></colgroup>
+            <thead  _ngcontent-c2>
+                <tr _ngcontent-c2>
+                    <th _ngcontent-c2 rowspan="1" class="dynamic-tabular__th dynamic-tabular__th--fixedwidth0 textRight header-sticky-first"></th>
+                    <th _ngcontent-c2 rowspan="1" class="dynamic-tabular__th dynamic-tabular__th--fixedwidth0 textRight header-sticky-first"></th>
+                    <th _ngcontent-c2 [ngClass]="{'dynamic-tabular__th dynamic-tabular__th--fixedwidth0 textRight header-sticky-first':displayFirstYearValues,'dynamic-tabular__th dynamic-tabular__th--fixedwidth0 textRight header-sticky-first colhidden':!displayFirstYearValues}" colspan="12" rowspan="1" scope="colgroup"></th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textRight header-sticky-first"  rowspan="1" scope="colgroup">
+                        <button (click)="onChange($event,'One')" _ngcontent-c2 class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                    </th>
+                    <th _ngcontent-c2 [ngClass]="{'dynamic-tabular__th textCenter header-sticky-second':displaySecondYearValues,'dynamic-tabular__th textCenter header-sticky-second colhidden':!displaySecondYearValues}" colspan="12" rowspan="1" scope="colgroup"></th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textRight header-sticky-first"  rowspan="1" scope="colgroup">
+                        <button (click)="onChange($event,'Two')" _ngcontent-c2 class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                    </th>
+                    <th _ngcontent-c2 [ngClass]="{'dynamic-tabular__th textCenter header-sticky-second':displayThirdYearValues,'dynamic-tabular__th textCenter header-sticky-second colhidden':!displayThirdYearValues}" colspan="12" rowspan="1" scope="colgroup"></th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textRight header-sticky-first"  rowspan="1" scope="colgroup">
+                        <button (click)="onChange($event,'Three')"  _ngcontent-c2 class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                    </th>
+                    <th _ngcontent-c2 [ngClass]="{'dynamic-tabular__th textCenter header-sticky-second':displayFourYearValues,'dynamic-tabular__th textCenter header-sticky-second colhidden':!displayFourYearValues}" colspan="12" rowspan="1" scope="colgroup"></th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textRight header-sticky-first"  rowspan="1" scope="colgroup">
+                        <button (click)="onChange($event,'Four')"  _ngcontent-c2 class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                    </th>
+                    <th _ngcontent-c2 [ngClass]="{'dynamic-tabular__th textCenter header-sticky-second':displayFiveYearValues,'dynamic-tabular__th textCenter header-sticky-second colhidden':!displayFiveYearValues}" colspan="12" rowspan="1" scope="colgroup"></th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textRight header-sticky-first"  rowspan="1" scope="colgroup">
+                        <button (click)="onChange($event,'Five')"  _ngcontent-c2 class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                    </th>
+
+                </tr>
+                <tr _ngcontent-c2>
+                    <th  _ngcontent-c2 class="dynamic-tabular__th textRight header-sticky-second" rowspan="1"></th>
+                    <th  _ngcontent-c2 class="dynamic-tabular__th textRight header-sticky-second" rowspan="1"></th>
+                    <th _ngcontent-c2 *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__th dynamic-tabular__th--fixedwidth0 textRight header-sticky-first':displayFirstYearValues,'dynamic-tabular__th dynamic-tabular__th--fixedwidth0 textRight header-sticky-first colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div *ngIf="years.length>0" _ngcontent-c2>{{years[0].year}}</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </th>
+                    <th _ngcontent-c2 *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__th textCenter header-sticky-second':displaySecondYearValues,'dynamic-tabular__th textCenter header-sticky-second colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div *ngIf="years.length>0" _ngcontent-c2>{{years[1].year}}</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </th>
+                    <th _ngcontent-c2 *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__th textCenter header-sticky-second':displayThirdYearValues,'dynamic-tabular__th textCenter header-sticky-second colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div *ngIf="years.length>0" _ngcontent-c2>{{years[2].year}}</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </th>
+                    <th _ngcontent-c2 *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__th textCenter header-sticky-second':displayFourYearValues,'dynamic-tabular__th textCenter header-sticky-second colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div *ngIf="years.length>0" _ngcontent-c2>{{years[3].year}}</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </th>
+                    <th _ngcontent-c2 *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__th textCenter header-sticky-second':displayFiveYearValues,'dynamic-tabular__th textCenter header-sticky-second colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</th>
+                    <th _ngcontent-c2 class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div *ngIf="years.length>0" _ngcontent-c2>{{years[4].year}}</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--<tr class="dynamic-tabular__tr personaltotal_tr">
+                    <td class="dynamic-tabular__td personaltotal_td textLeft" colspan="2">Revenue Total</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayFirstYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displaySecondYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayThirdYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayFourYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayFiveYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <tr class="dynamic-tabular__tr category_td">
+                    <td class="dynamic-tabular__td category_td textLeft revenuerow" colspan="2">Product/Service</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td category_td textRight':displayFirstYearValues,'dynamic-tabular__td category_td textRight colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td category_td textRight':displaySecondYearValues,'dynamic-tabular__td category_td textRight colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td category_td textRight':displayThirdYearValues,'dynamic-tabular__td category_td textRight colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td category_td textRight':displayFourYearValues,'dynamic-tabular__td category_td textRight colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td category_td textRight':displayFiveYearValues,'dynamic-tabular__td category_td textRight colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>-->
+                <!--<tr *ngFor="let productDetail of product" class="dynamic-tabular__tr textRight revenuerow">
+                    <td class="dynamic-tabular__td textLeft position_td" style="margin:0px!important;">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="dynamic-tabular__td_expcoll">
+                                        <button (click)="hello(productDetail)" class="dynamic-table-container__toggleButton__small dynamic-table-container__toggleButton__small--open"></button>
+                                    </td>
+                                    <td class="dynamic-tabular__td_expcoll">
+                                        <span class="dynamic-table-container__toggleButton__small">{{productDetail.revenueName}}</span>
+                                    </td>
+                                    <td class="dynamic-tabular__td_expcoll">
+                                        <span class="k-icon k-i-delete" style="cursor:pointer"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>Total Revenue</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>-->
+                <tr class="dynamic-tabular__tr personaltotal_tr">
+                    <td class="dynamic-tabular__td personaltotal_td textLeft" colspan="2">Product/Service</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayFirstYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2019</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displaySecondYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2020</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayThirdYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2021</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayFourYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2022</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayFiveYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <ng-container *ngFor="let productDetail of productDetails">
+                    <tr class="dynamic-tabular__tr textRight revenuerow">
+                        <td class="dynamic-tabular__td textLeft position_td" style="margin:0px!important;">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="dynamic-tabular__th textCenter header-sticky-second">
+                                            <button (click)="hello(productDetail)" class="dynamic-table-container__toggleButton__smallbox"></button>
+                                        </td>
+                                        <td class="dynamic-tabular__th textCenter header-sticky-second">
+                                            <span>{{productDetail.revenueName}}</span>
+                                        </td>
+                                        <td class="dynamic-tabular__th textCenter header-sticky-second">
+                                            <span>Delete</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="dynamic-tabular__td textLeft position_td" style="margin:0px!important;">Total Revenue</td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Number of units sold/client</td>
+                        <td  *ngFor="let i of noofUnitsSoldperClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col">
+                            {{i.revenueValue}}
+                        </td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[0].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofUnitsSoldperClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[1].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofUnitsSoldperClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[2].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofUnitsSoldperClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[3].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofUnitsSoldperClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[4].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Number of clients</td>
+                        <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Number of units sold</td>
+                        <td  *ngFor="let i of noofUnitsSold" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofUnitsSold" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofUnitsSold" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofUnitsSold" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofUnitsSold" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Price per unit</td>
+                        <td  *ngFor="let i of pricePerUnit" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[0].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of pricePerUnit" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[1].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of pricePerUnit" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[2].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of pricePerUnit" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col">£{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[3].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of pricePerUnit" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[4].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">No. of days to get paid</td>
+                        <td  *ngFor="let i of noofDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[0].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[1].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[2].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[3].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of noofDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[4].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <!--<tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Accounts Receivable</td>
+                        <td  *ngFor="let i of productAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Prepaid Revenue</td>
+                        <td  *ngFor="let i of productPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>-->
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Total Revenue</td>
+                        <td  *ngFor="let i of productTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[0].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[1].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[2].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[3].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of productTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>{{years[4].year}}</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                </ng-container>
+                <tr class="dynamic-tabular__tr personaltotal_tr">
+                    <td class="dynamic-tabular__td personaltotal_td textLeft" colspan="2">Other</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayFirstYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displaySecondYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayThirdYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayFourYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td personaltotal_td textLeft':displayFiveYearValues,'dynamic-tabular__td personaltotal_td textRight colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <ng-container *ngFor="let productDetail of otherRevenues">
+                    <tr class="dynamic-tabular__tr textRight revenuerow">
+                        <td class="dynamic-tabular__td textLeft position_td" style="margin:0px!important;">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="dynamic-tabular__th textCenter header-sticky-second">
+                                            <button (click)="viewOtherRevenue(productDetail)" class="dynamic-table-container__toggleButton__smallbox"></button>
+                                        </td>
+                                        <td class="dynamic-tabular__th textCenter header-sticky-second">
+                                            <span>{{productDetail.revenueName}}</span>
+                                        </td>
+                                        <td class="dynamic-tabular__th textCenter header-sticky-second">
+                                            <span>Delete</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="dynamic-tabular__td textLeft position_td" style="margin:0px!important;">Total Revenue</td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Revenue</td>
+                        <td  *ngFor="let i of others" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col">
+                            £{{i.revenueValue}}
+                        </td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of others" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of others" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of others" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of others" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">No. of days get paid</td>
+                        <td  *ngFor="let i of otherDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherDaysGetPaid" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Total Revenue</td>
+                        <td  *ngFor="let i of otherTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherTotal" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> £{{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <!--<tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Account Receivable</td>
+                        <td  *ngFor="let i of otherAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherAccountReceivable" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail.disable" class="dynamic-tabular__tr">
+                        <td class="dynamic-tabular__td textRight"></td>
+                        <td class="dynamic-tabular__td textLeft">Prepaid Revenue</td>
+                        <td  *ngFor="let i of otherPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2023</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2024</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2025</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2026</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                        <td  *ngFor="let i of otherPrepaidRevenue" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                        <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                            <div _ngcontent-c2>2027</div>
+                            <div _ngcontent-c2 style="clear:both">Total</div>
+                        </td>
+                    </tr>-->
+                </ng-container>
+                <!--<tr *ngFor="let productDetail of product" class="dynamic-tabular__tr textRight revenuerow">
+                    <td class="dynamic-tabular__td textLeft position_td" style="margin:0px!important;">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="dynamic-tabular__td_expcoll">
+                                        <button (click)="hello(productDetail)" class="dynamic-table-container__toggleButton__small dynamic-table-container__toggleButton__small--open"></button>
+                                    </td>
+                                    <td class="dynamic-tabular__td_expcoll">
+                                        <span class="dynamic-table-container__toggleButton__small">{{productDetail.revenueName}}</span>
+                                    </td>
+                                    <td class="dynamic-tabular__td_expcoll">
+                                        <span class="k-icon k-i-delete" style="cursor:pointer"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>Total Revenue</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <tr *ngIf="displayLoopTable" class="dynamic-tabular__tr">
+                    <td class="dynamic-tabular__td textRight">{{revenue.revenueName}}</td>
+                    <td class="dynamic-tabular__td textLeft">Number of units sold/client</td>
+                    <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col">
+                        {{i.revenueValue}}
+                    </td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of noofClients" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.revenueValue}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <tr *ngIf="displayLoopTable" class="dynamic-tabular__tr">
+                    <td class="dynamic-tabular__td textRight"></td>
+                    <td class="dynamic-tabular__td textLeft">Number of clients</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <tr *ngIf="displayLoopTable" class="dynamic-tabular__tr">
+                    <td class="dynamic-tabular__td textRight"></td>
+                    <td class="dynamic-tabular__td textLeft">Number of units sold</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <tr *ngIf="displayLoopTable" class="dynamic-tabular__tr">
+                    <td class="dynamic-tabular__td textRight"></td>
+                    <td class="dynamic-tabular__td textLeft">Price per unit</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <tr *ngIf="displayLoopTable" class="dynamic-tabular__tr">
+                    <td class="dynamic-tabular__td textRight"></td>
+                    <td class="dynamic-tabular__td textLeft">No. of days to get paid</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <tr *ngIf="displayLoopTable" class="dynamic-tabular__tr">
+                    <td class="dynamic-tabular__td textRight"></td>
+                    <td class="dynamic-tabular__td textLeft">Accounts Receivable</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>
+                <tr *ngIf="displayLoopTable" class="dynamic-tabular__tr">
+                    <td class="dynamic-tabular__td textRight"></td>
+                    <td class="dynamic-tabular__td textLeft">Prepaid Revenue</td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFirstYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFirstYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2023</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displaySecondYearValues,'dynamic-tabular__td textRight position_td colhidden':!displaySecondYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2024</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayThirdYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayThirdYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2025</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFourYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFourYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2026</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                    <td  *ngFor="let i of monthsList" [ngClass]="{'dynamic-tabular__td textRight position_td':displayFiveYearValues,'dynamic-tabular__td textRight position_td colhidden':!displayFiveYearValues}" colspan="1" rowspan="1" scope="col"> {{i.month}}</td>
+                    <td class="dynamic-tabular__th textCenter header-sticky-second" colspan="1" rowspan="1">
+                        <div _ngcontent-c2>2027</div>
+                        <div _ngcontent-c2 style="clear:both">Total</div>
+                    </td>
+                </tr>-->
+            </tbody>
+        </table>
+    </div>
+</section>

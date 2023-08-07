@@ -1,0 +1,200 @@
+<!--<div class="header__panel header__panel--wide">
+    <ul class="nav header__nav nav--alignRight dashboard__menu">
+        <li class="nav__list-item">
+            <a class="nav__link nav__link--last" routerlink="/" href="/">Dashboard</a>
+        </li>
+        <li class="nav__list-item nav__parent">
+            <a class="nav__link">Financial Statements</a>
+            <label class="nav__label" for="subnav-dashboard"></label>
+            <input class="nav__toggler" id="subnav-dashboard" type="checkbox">
+            <ul class="nav nav--secondary">
+                <li class="nav__list-item nav__child">
+                    <a class="nav__link" href="#">
+                        Financial Statements
+                    </a>
+                    <label class="nav__label" for="subnav-dashboard"></label>
+                </li>
+                <li class="nav__list-item nav__child">
+                    <a class="nav__link" href="#">
+                        Income Statements
+                    </a>
+                    <label class="nav__label" for="subnav-dashboard"></label>
+                </li>
+                <li class="nav__list-item nav__child">
+                    <a class="nav__link" href="#">
+                        Balance Sheet
+                    </a>
+                    <label class="nav__label" for="subnav-dashboard"></label>
+                </li>
+                <li class="nav__list-item nav__child">
+                    <a class="nav__link" href="#">
+                        Cash Flow Statements
+                    </a>
+                    <label class="nav__label" for="subnav-dashboard"></label>
+                </li>
+                <li class="nav__list-item nav__child">
+                    <a class="nav__link" href="#">
+                        Cash Flow 
+                    </a>
+                    <label class="nav__label" for="subnav-dashboard"></label>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>-->
+<mat-toolbar class="navControls">
+    <span (click)="GotoHome()" class="branding_white">Monetary Navigator</span>
+    <div class="spacer"></div>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()">{{this.scenario.scenarioName}}</button>
+    <ul>
+        <li>
+            <a href="#">Financial Statements</a>
+            <ul class="name">
+                <li>
+                    <a [routerLink]="['/revenue',orgId,scenario.scenarioId]">Income statement</a>
+                </li>
+                <li>
+                    <a href="#">Balance sheet</a>
+                </li>
+                <li>
+                    <a href="#">Cash flow statement </a>
+                </li>
+                <li>
+                    <a href="#">Cash flow</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <a href="#">Data Input</a>
+            <ul class="name">
+                <li>
+                    <a [routerLink]="['/revenue',userId,orgId,scenario.scenarioId]">Revenue (Sales)</a>
+                </li>
+                <li>
+                    <a  [routerLink]="['/cogs',userId,orgId,scenario.scenarioId]">Cost of goods sold</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/personnel',userId,orgId,scenario.scenarioId]">Personnel</a>
+                </li>
+                <li>
+                    <a href="#">Operating expenses</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/assets',userId,orgId,scenario.scenarioId]">Assets</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/financing',userId,orgId,scenario.scenarioId]">Financing</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="downloadPdf()">User Guide</button>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="openContact()">Contact</button>
+    <button mat-button *ngIf="disableUsers" activeroute="nav__link--active" class="nav__link" (click)="displayUsers()">Users</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()">Company</button>
+    <a mat-button  activeroute="nav__link--active" class="nav__link" routerlink="/login" href="/login">Logout</a>
+</mat-toolbar>
+
+
+<!--<div class="header__panel header__panel--wide">
+    <ul class="nav header__nav nav--alignRight dashboard__menu">
+        <li class="nav__list-item">
+            <a class="nav__link nav__link--last" routerlink="/" href="/">Dashboard</a>
+        </li>
+        <li class="nav__list-item">
+            <select aria-placeholder="Financial Statements" class="k-widget k-dropdown k-header ng-untouched ng-pristine ng-valid">
+                <option value="1" class="k-input">5 Years</option>
+                <option value="2">10 Years</option>
+            </select>
+        </li>
+        <li class="nav__list-item">
+            <label class="form__label">
+                Forecast Period
+            </label>
+            <select class="k-widget k-dropdown k-header ng-untouched ng-pristine ng-valid">
+                <option value="1" class="k-input">5 Years</option>
+                <option value="2">10 Years</option>
+            </select>
+        </li>
+    </ul>
+</div>-->
+<div class="tabHeader">
+    <a class="tabHeader__anchor tabHeader--active" routerlink="/organisation" routerlinkactive="tabHeader--active" href="/organisation"><!--added padding for tabheader-->
+        <div class="tabHeader__title">Scenario settings</div>
+    </a>
+</div>
+<div class="tabBody">
+    <div class="tabBody__content tabBody--active" (click)="ngOnInit()">
+        A version of your financial plan is typically called a "scenario". You can enter (or update) the settings for your scenario below. By doing so, your financial plan will be fully customized to your needs. So don’t forget this step!
+    </div>
+</div>
+<form #scenarioForm="ngForm" (ngSubmit)="login(scenarioForm)" class="form form--section ng-untouched ng-pristine ng-valid" novalidate>
+    <div class="layout">
+        <div class="layout__row layout__row--formSection">
+            <div class="layout__col--xl6 layout__col--md12">
+                <h3>Scenario settings</h3>
+                <div class="form__group">
+                    <label class="form__label">
+                        Scenario name
+                    </label>
+                    <input class="form__input ng-untouched ng-pristine ng-valid" [value]="this.scenario.scenarioName?this.scenario.scenarioName:'Name'" formcontrolname="name" maxlength="30" placeholder="Name (max. length 30)" type="text">
+                </div>
+                <div class="form__group">
+                    <label class="form__label">
+                        Corporate income tax
+                    </label>
+                    <input formcontrolname="incomeTax" [value]="this.scenario.tax + '%'" autocomplete="off" format="## \%" autocorrect="off" class="k-widget k-numerictextbox ng-untouched ng-pristine ng-valid" role="spinbutton" id="k-2a6489d5-1c26-c970-ec1f-3322f6f2d6be" title [placeholder]="this.scenario.tax?this.scenario.tax + '%':'Corporate income tax'" tabindex="0" aria-valuenow="25">
+                </div>
+                <div class="form__group">
+                    <label class="form__label">
+                        Projection Year
+                    </label>
+                    <input autocomplete="off" autocorrect="off" [value]="this.scenario.startYear" class="k-widget k-numerictextbox ng-untouched ng-pristine ng-valid" role="spinbutton" id="k-2a6489d5-1c26-c970-ec1f-3322f6f2d6be" title placeholder=" Projection Year" tabindex="0" aria-valuenow="25">
+                </div>
+                <div class="form__group">
+                    <label class="form__label">
+                        Forecast Period
+                    </label>
+                    <select class="k-widget k-dropdown k-header ng-untouched ng-pristine ng-valid">
+                        <option value="1" class="k-input">5 Years</option>
+                        <option value="2">10 Years</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        <div class="layout__row layout__row--formSection">
+            <div class="layout__col--lg6 layout__col--md7">
+                <h3>Market size info</h3>
+                <div class>
+                    <div class="form__group">
+                        <label class="form__label">
+                            Year of market size data
+                        </label>
+                        <input formcontrolname="incomeTax" [value]="this.scenario.marketSize" autocomplete="off" format="## \%" autocorrect="off" class="k-widget k-numerictextbox ng-untouched ng-pristine ng-valid" role="spinbutton" id="k-2a6489d5-1c26-c970-ec1f-3322f6f2d6be" title placeholder="Corporate income tax" tabindex="0" aria-valuenow="25">
+                    </div>
+                    <div class="form__group">
+                        <label class="form__label">
+                            TAM
+                        </label>
+                        <input aria-valuemax="10000000000000000" [value]="this.scenario.tam" formcontrolname="incomeTax" autocomplete="off" format="## \%" autocorrect="off" class="k-widget k-numerictextbox ng-untouched ng-pristine ng-valid" role="spinbutton" id="k-2a6489d5-1c26-c970-ec1f-3322f6f2d6be" title placeholder="Corporate income tax" tabindex="0" aria-valuenow="25">
+                    </div>
+                    <div class="form__group">
+                        <label class="form__label">
+                            SAM
+                        </label>
+                        <input aria-valuemax="10000000000000000" [value]="this.scenario.sam" formcontrolname="incomeTax" autocomplete="off" format="## \%" autocorrect="off" class="k-widget k-numerictextbox ng-untouched ng-pristine ng-valid" role="spinbutton" id="k-2a6489d5-1c26-c970-ec1f-3322f6f2d6be" title placeholder="Corporate income tax" tabindex="0" aria-valuenow="25">
+                    </div>
+                    <div class="form__group">
+                        <label class="form__label">
+                            SOM
+                        </label>
+                        <input aria-valuemax="10000000000000000" [value]="this.scenario.som" formcontrolname="incomeTax" autocomplete="off" format="## \%" autocorrect="off" class="k-widget k-numerictextbox ng-untouched ng-pristine ng-valid" role="spinbutton" id="k-2a6489d5-1c26-c970-ec1f-3322f6f2d6be" title placeholder="Corporate income tax" tabindex="0" aria-valuenow="25">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

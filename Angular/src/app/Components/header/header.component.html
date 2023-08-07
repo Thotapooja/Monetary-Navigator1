@@ -1,0 +1,11 @@
+<mat-toolbar class="navControls">
+    <a class="navControls__branding branding branding--compact active" routerlink="/home" routerlinkactive="active" href="/home">
+        <span class="branding_white">Monetary Navigator</span>
+    </a>
+    <div class="spacer"></div>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="downloadPdf()">User Guide</button>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="openContact()">Contact</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="displayUsers()">Users</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()">Company</button>
+    <a mat-button  activeroute="nav__link--active" class="nav__link" routerlink="/login" href="/login">Logout</a>
+</mat-toolbar>  

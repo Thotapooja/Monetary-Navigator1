@@ -1,0 +1,19 @@
+<mat-toolbar (click)="ngOnInit()" class="navControls">
+    <a class="navControls__branding branding branding--compact active" [routerLink]="['/home',user.userId,orgId]">
+        <span class="branding_white">Monetary Navigator</span>
+    </a>
+    <div class="spacer"></div>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="downloadPdf()">User Guide</button>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="openContact()">Contact</button>
+    <button mat-button *ngIf="disableUsers" activeroute="nav__link--active" class="nav__link" (click)="displayUsers()">Users</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()">Company</button>
+    <a mat-button  activeroute="nav__link--active" class="nav__link" routerlink="/login" href="/login">Logout</a>
+</mat-toolbar>  
+<div class="scenario__list widgets__cluster widgets__showPointer" >
+    <div class="widgets__item widgets__item--wide widgets__item--inactive scenario_addnewbox" title="Add New Project">
+        <div class="scenario_addnew" >
+            <span class="k-icon k-i-plus-outline k-icon-80 k-icon-black" *ngIf = enable (click)="viewDashboard()">{{this.scenario.scenarioName}}</span>
+            <img *ngIf = !enable class="k-icon k-i-plus-outline k-icon-80 k-icon-black" (click)="this.scenarios.length == 0 ? addScenario():''" src="../../assets/addProject.png" title="Add new project">
+        </div>
+    </div>
+</div>

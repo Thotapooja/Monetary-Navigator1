@@ -1,0 +1,124 @@
+<mat-toolbar class="navControls">
+    <a class="navControls__branding branding branding--compact active" routerlink="/home" routerlinkactive="active" href="/home">
+        <span class="branding_white">Monetary Navigator</span>
+    </a>
+    <div class="spacer"></div>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()"></button>
+    <ul>
+        <li>
+            <a href="#">Financial Statements</a>
+            <ul class="name">
+                <li>
+                    <a href="#">Income statement</a>
+                </li>
+                <li>
+                    <a href="#">Balance sheet</a>
+                </li>
+                <li>
+                    <a href="#">Cash flow statement </a>
+                </li>
+                <li>
+                    <a href="#">Cash flow</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <a href="#">Data Input</a>
+            <ul class="name">
+                <li>
+                    <a href="#">Revenue (Sales)</a>
+                </li>
+                <li>
+                    <a href="#">Cost of goods sold</a>
+                </li>
+                <li>
+                    <a href="#">Personnel</a>
+                </li>
+                <li>
+                    <a href="#">Operating expenses</a>
+                </li>
+                <li>
+                    <a href="#">Assets</a>
+                </li>
+                <li>
+                    <a href="#">Financing</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="downloadPdf()">User Guide</button>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="openContact()">Contact</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="displayUsers()">Users</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()">Company</button>
+    <a mat-button  activeroute="nav__link--active" class="nav__link" routerlink="/login" href="/login">Logout</a>
+</mat-toolbar>
+<div class="tabHeader">
+    <a class="tabHeader__anchor tabHeader--active" routerlink="/overview/profit-loss" routerlinkactive="tabHeader--active" href="/overview/profit-loss">
+        <div class="tabHeader__title">
+            Income statement
+        </div>
+    </a>
+    <a class="tabHeader__anchor tabHeader--active" routerlink="/overview/profit-loss" routerlinkactive="tabHeader--active" href="/overview/profit-loss">
+        <div class="tabHeader__title">
+            Balance sheet
+        </div>
+    </a>
+    <a class="tabHeader__anchor tabHeader--active" routerlink="/overview/profit-loss" routerlinkactive="tabHeader--active" href="/overview/profit-loss">
+        <div class="tabHeader__title">
+            Cash flow statement
+        </div>
+    </a>
+    <a class="tabHeader__anchor tabHeader--active" routerlink="/overview/profit-loss" routerlinkactive="tabHeader--active" href="/overview/profit-loss">
+        <div class="tabHeader__title">
+            Cash flow
+        </div>
+    </a>
+</div>
+<router-outlet></router-outlet>
+<div class="tabBody">
+    <div class="tabBody__content tabBody--active">
+        The cash flow statement shows (per month or year) all cash going in and out of a company and consists of three parts: operational, investment and financial cash flow.    </div>
+    <h1>Cash flow statement</h1>
+    <section class="section--table">
+        Currency used 
+        <span class="currency">GBP</span>
+        <div class="table-container scroller-div" style="overflow:auto; height:500px">
+            <table class="tabular">
+                <colgroup span="12">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="tabular__th tabular__th--fixedwidth header-sticky-first" rowspan="1"></th>
+                    </tr>
+                    <tr>
+                        <th class="tabular__th textRight header-sticky-second" rowspan="1"></th>
+                        <th class="tabular__th textRight header-sticky-second" rowspan="1"></th>
+                        <th class="tabular__th textRight header-sticky-first colhidden" colspan="12" rowspan="1" scope="colgroup"></th>
+                        <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                            <button class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                        </th>
+                        <th class="tabular__th textRight header-sticky-first colhidden" colspan="12" rowspan="1" scope="colgroup"></th>
+                        <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                            <button class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                        </th>
+                        <th class="tabular__th textRight header-sticky-first colhidden" colspan="12" rowspan="1" scope="colgroup"></th>
+                        <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                            <button class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                        </th>
+                        <th class="tabular__th textRight header-sticky-first colhidden" colspan="12" rowspan="1" scope="colgroup"></th>
+                        <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                            <button class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                        </th>
+                        <th class="tabular__th textRight header-sticky-first colhidden" colspan="12" rowspan="1" scope="colgroup"></th>
+                        <th class="tabular__th tabular__th--fixedwidth2 textRight header-sticky-first" rowspan="1" scope="colgroup">
+                            <button class="dynamic-table-container__toggleButton__smallbox" style="float: right;"></button>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </section>
+
+</div>

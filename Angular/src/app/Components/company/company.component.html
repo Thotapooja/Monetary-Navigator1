@@ -1,0 +1,63 @@
+<mat-toolbar class="navControls">
+    <span (click)="GotoHome()" class="branding_white">Monetary Navigator</span>
+    <div class="spacer"></div>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="downloadPdf()">User Guide</button>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="openContact()">Contact</button>
+    <button mat-button *ngIf="disableUsers" activeroute="nav__link--active" class="nav__link" (click)="displayUsers()">Users</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()">Company</button>
+    <a mat-button  activeroute="nav__link--active" class="nav__link" routerlink="/login" href="/login">Logout</a>
+</mat-toolbar>  
+<div>
+<div class="tabHeader">
+    <a class="tabHeader__anchor tabHeader--active" routerlink="/organisation" routerlinkactive="tabHeader--active" href="/organisation">
+        <div class="tabHeader__title">Company Profile</div>
+    </a>
+</div>
+<div class="tabBody">
+    <div class="tabBody__content tabBody--active">
+        In the company profile you can enter your company information and some general settings that apply to your complete account. It includes important fields such your preferred currency and the sector your company is in. Based on the (sub-)sector you select, Monetary Navigator triggers industry averages which you can use for benchmarking purposes. So don’t forget to complete your company profile!
+    </div>
+</div>
+<form #companyForm="ngForm" class="form form--section ng-untouched ng-pristine ng-valid" novalidate>
+    <div class="layout">
+        <div class="layout__row layout__row--formSection">
+            <div class="layout__col--xl6 layout__col--md12">
+                <h3>Company Profile</h3>
+                <div class="form__group">
+                    <label class="form__label labelwidth"></label>
+                    <input (focusout)="changeName(companyForm)" class="form__input orgCalculativeWidth ng-untouched ng-pristine ng-valid" formcontrolname="name" maxlength="30" name="name" [placeholder]="this.organisation.name?this.organisation.name:'Name'" tabindex="1" type="text" (ngModel)="organisation.name" [value]="this.organisation.name?this.organisation.name:'Name'">
+                    <!--<p>{{this.organisation.Name}}</p>-->
+                </div>
+                <div class="form__group">
+                    <label class="form__label labelwidth">Website</label>
+                    <input (focusout)="changeWebsite(companyForm)" class="form__input orgCalculativeWidth ng-untouched ng-pristine ng-valid" name="website" [value]="this.organisation.website?this.organisation.website:'Website'" (ngModel)="organisation.website" formcontrolname="website" placeholder="Website" tabindex="2" type="text"> 
+                </div>
+                <div class="form__group">
+                    <label class="form__label labelwidth">Sector</label>
+                    <input (focusout)="changeSector(companyForm)" class="form__input orgCalculativeWidth ng-untouched ng-pristine ng-valid" name="sector" [value]="this.organisation.sector?this.organisation.sector:'Sector'" (ngModel)="organisation.sector" formcontrolname="sector" placeholder="Sector" tabindex="3" type="text"> 
+                </div>
+                <div class="form__group">
+                    <label class="form__label labelwidth">Sub-sector</label>
+                    <input (focusout)="changeSubSector(companyForm)" class="form__input orgCalculativeWidth ng-untouched ng-pristine ng-valid" name="subSector" [value]="this.organisation.subSector?this.organisation.subSector:'Sub - Sector'" (ngModel)="organisation.subSector" formcontrolname="subSector" placeholder="Sub - Sector" tabindex="4" type="text"> 
+                </div>
+                <div class="form__group">
+                    <label class="form__label labelwidth">Description</label>
+                    <textarea (focusout)="changeDescription(companyForm)" class="form__textarea orgCalculativeWidth ng-untouched ng-pristine ng-valid" name="description" [value]="this.organisation.description?this.organisation.description:'Description (max. length 4096)'" (ngModel)="organisation.description" formcontrolname="description" maxlength="4096" placeholder="Description (max. length 4096)" tabindex="5" type="text"></textarea>
+                </div>
+                <div class="form__group">
+                    <label class="form__label labelwidth">Country</label>
+                    <input (focusout)="changeCountry(companyForm)" class="form__input orgCalculativeWidth ng-untouched ng-pristine ng-valid" name="country" [value]="this.organisation.country?this.organisation.country:'Country'" formcontrolname="country" (ngModel)="organisation.country" placeholder="Country" tabindex="5" type="text"> 
+                </div>
+                <div class="form__group">
+                    <label class="form__label labelwidth">Currency</label>
+                    <input (focusout)="changeCurrency(companyForm)" class="form__input orgCalculativeWidth ng-untouched ng-pristine ng-valid" name="currency" [value]="this.organisation.currency?this.organisation.currency:'Currency'" formcontrolname="currency" (ngModel)="organisation.currency" placeholder="Currency" tabindex="6" type="text"> 
+                </div>
+                <div class="form__group">
+                    <label class="form__label labelwidth">Founded in year</label>
+                    <input (focusout)="changeFoundedYear(companyForm)" class="form__input orgCalculativeWidth ng-untouched ng-pristine ng-valid" name="foundedYear" [value]="this.organisation.foundedYear?this.organisation.foundedYear:'Founded in year'" (ngModel)="organisation.foundedYear" formcontrolname="foundedYear" placeholder="Founded in year" tabindex="7" type="text"> 
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>

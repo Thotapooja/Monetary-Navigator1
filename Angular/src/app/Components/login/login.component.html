@@ -1,0 +1,24 @@
+<div class="login-container">
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" class="form loginRegister__panel loginRegister__panel--form ng-dirty ng-touched ng-valid">
+      <h2 class="login_head">Login</h2>
+      <h4>Welcome back!</h4>
+      <div class="form__group form__group--large">
+        <input class="form__input form__input--large ng-dirty ng-valid ng-touched" id="email" name="email" formcontrolname="userName" (ngModel)="user.email"  placeholder="E-mail" type="email">
+      </div>
+      <div class="form__group form__group--large">
+        <input class="form__input form__input--large ng-dirty ng-valid ng-touched" id="password" name="password" formcontrolname="password" (ngModel)="user.password"  placeholder="Password" type="email">
+      </div>
+      <div class="loginRegister__help">
+        <a routerlink="/password/lost" routerlinkactive="active" href="/password/lost">Forgot your password?</a>
+      </div>
+      <div class="loginRegister__help">
+        <button class="loginRegister__btn btn btn--secondary">Login in to your account</button>
+      </div>
+    </form>
+    <div class="loginRegister__panel">
+      <p>Don't have an account yet? Register <a routerlink="/register" routerlinkactive="active" href="/register">here</a></p>
+    </div>
+</div>
+<router-outlet></router-outlet>
+ 
+  

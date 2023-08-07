@@ -1,0 +1,46 @@
+<mat-toolbar class="navControls">
+    <a class="navControls__branding branding branding--compact active" [routerLink]="['/home',userId,orgId]">
+        <span class="branding_white">Monetary Navigator</span>
+    </a>
+    <div class="spacer"></div>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="downloadPdf()">User Guide</button>
+    <button mat-button activeroute="nav__link--active" class="nav__link" (click)="openContact()">Contact</button>
+    <button mat-button *ngIf="disableUsers" activeroute="nav__link--active" class="nav__link" (click)="displayUsers()">Users</button>
+    <button mat-button  activeroute="nav__link--active" class="nav__link" (click)="company()">Company</button>
+    <a mat-button  activeroute="nav__link--active" class="nav__link" routerlink="/login" href="/login">Logout</a>
+</mat-toolbar>  
+<div>
+    <div class="tabBody">
+        <div class="tabBody__content tabBody--active">
+            <b>        
+            Hey there! In case you have any questions, suggestions or feedback about Monetary Navigator, you are more than welcome to leave a message.
+            You will receive a reply within 24 hours.  
+            </b>
+        </div>
+    </div>
+    <form class="form ng-untouched ng-pristine ng-invalid" #contactForm="ngForm" (ngSubmit)="login(contactForm)">
+        <div class="layout">
+            <div class="layout__row layout__row--formSection">
+                <div class="layout__col--lg6 layout__col--md7">
+                    <h3>Contact</h3>
+                
+                    <div class="form__group form__group--error">
+                        <label class="form__label">Your email address</label>
+                        <input class="form__input ng-pristine ng-invalid warning ng-touched" id="emailAddress" name="emailAddress" formcontrolname="emailAddress" (ngModel)="contact.emailAddress" placeholder="Your email address" type="email">
+                    </div> 
+                    <div class="form__group form__group--error">
+                        <label class="form__label">Subject</label>
+                        <input class="form__input ng-pristine ng-invalid warning ng-touched" id="subject" name="subject" formcontrolname="subject" (ngModel)="contact.subject" placeholder="Subject (Max Length 4096)" type="text">
+                    </div>              
+                    <div class="form__group form__group--error">
+                        <label class="form__label">Message</label>
+                        <input class="form__input ng-pristine ng-invalid warning ng-touched" id="message" name="message" formcontrolname="message" (ngModel)="contact.message" placeholder="Message (Max Length 4096)" type="text">
+                    </div> 
+                    <div class="form__group">
+                        <button class="btn form__btn" type="submit"> Send </button>
+                    </div>
+             </div>
+         </div>
+        </div>
+    </form>
+</div>
